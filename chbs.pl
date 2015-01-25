@@ -27,7 +27,7 @@ B<chbs> - correct horse battery staple
  
 =head1 SYNOPSIS
 
-B<chbs> [B<--help>|B<--man>] [B<--num> #] [B<--min> #] [B<--max> #] [B<--dict>|B<--file> {path}]
+B<chbs> [B<--help>|B<--man>] [B<--num> #] [B<--min> #] [B<--max> #] [B<--dict>|B<--file> {path}] [--separator {characters}]
 
 =head1 OPTIONS
 
@@ -35,6 +35,9 @@ B<chbs> [B<--help>|B<--man>] [B<--num> #] [B<--min> #] [B<--max> #] [B<--dict>|B
 	--num [#]	Number of words in the passphrase. (Default: 4)
 	--min [#]	Minimum number of characters per word. (Default: 1)
 	--max [#]	Maximum number of characters per word. (Default: 16)
+
+ Parameter for separator
+        --separator [c] List of characters to use as separator.
  
  Word list source
 	(Default: an internal list of about 4000 common English words.)
@@ -75,6 +78,8 @@ my $num=4;	# Number of words in the passphrase.
 my $min=1;	# Minimum number of letters per word.
 my $max=16;	# Maximum number of letters per word.
 
+my $sep=' ';    # Separator, by default a blank.
+
 my $dict='';	# Option to use the system dictionary as word list.
 my $file='';	# Arbitrary file to grind into a word list.
 my $help='';	# Help!
@@ -89,6 +94,7 @@ sub defaultWordList;
 GetOptions ('num=i' => \$num,
 	    'min=i' => \$min,
 	    'max=i' => \$max,
+            'separator=s' => \$sep,
 	    'dict' => \$dict,
 	    'file=s' => \$file,
 	    'help' => \$help,
@@ -111,12 +117,15 @@ if ($file) { @wordlist = arbitraryFile; }
 elsif ($dict) { @wordlist = systemDictionary; }
 else { @wordlist = defaultWordList; }
 
+# Create an array out of the separator string
+my @sep = split(//, $sep);
+
 # Choose words according to parameters, and construct the passphrase.
 foreach my $i (1 .. $num) {
 	my $word = $wordlist[ rand @wordlist ];
 	redo if length $word < $min or length $word > $max;
 	$passphrase .= $word;
-	if ($i < $num) { $passphrase .= ' '; }
+	if ($i < $num) { $passphrase .= $sep[ rand @sep ]; }
 }
 
 print($passphrase,"\n");

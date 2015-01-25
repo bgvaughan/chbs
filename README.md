@@ -4,7 +4,8 @@ correct horse battery staple, a random passphrase generator.
 
 Usage:
 
-    chbs [--help|--man] [--num #] [--min #] [--max #] [--dict|--file {path}]
+    chbs [--help|--man] [--num #] [--min #] [--max #] [--dict|--file {path}] [--separator {characters}]
+
 
 Options:
 
@@ -12,6 +13,9 @@ Options:
             --num [#]       Number of words in the passphrase. (Default: 4)
             --min [#]       Minimum number of characters per word. (Default: 1)
             --max [#]       Maximum number of characters per word. (Default: 16)
+ 
+     Parameter for separator
+            --separator [c] List of characters to use as separator.
  
      Word list source
             (Default: an internal list of about 4000 common English words.)
