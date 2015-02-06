@@ -143,7 +143,9 @@ sub arbitraryFile {
 	my @temp = ( );
 
 	while (<$ARBITRARYFILE>) {
-		push(@temp,split(/[^[:alpha:]]/));
+		chomp;
+		next if /[^[:alpha:]]/;
+		push(@temp, $_);
 	}
 
 	close($ARBITRARYFILE);
