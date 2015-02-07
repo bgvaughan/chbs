@@ -6,7 +6,7 @@ correct horse battery staple, a random passphrase generator.
 Usage
 -----
 
-    chbs [--help|--man] [--num #] [--min #] [--max #] [--dict|--file {path}] [--separator {characters}]
+    chbs [--help|--man] [--num #] [--min #] [--max #] [--sep {string}] [--dict|--file {path}]
 
 Options
 -------
@@ -19,7 +19,7 @@ Options
 
 ### Parameter for separator
 
-    --separator [c] List of characters to use as separator.
+    --sep [string]  Separator between words. (Default: a blank space)
  
 ### Word list source
 

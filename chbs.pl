@@ -27,7 +27,7 @@ B<chbs> - correct horse battery staple
  
 =head1 SYNOPSIS
 
-B<chbs> [B<--help>|B<--man>] [B<--num> #] [B<--min> #] [B<--max> #] [B<--dict>|B<--file> {path}] [--separator {characters}]
+B<chbs> [B<--help>|B<--man>] [B<--num> #] [B<--min> #] [B<--max> #] [--sep {string}] [B<--dict>|B<--file> {path}] 
 
 =head1 OPTIONS
 
@@ -37,7 +37,7 @@ B<chbs> [B<--help>|B<--man>] [B<--num> #] [B<--min> #] [B<--max> #] [B<--dict>|B
 	--max [#]	Maximum number of characters per word. (Default: 16)
 
  Parameter for separator
-        --separator [c] List of characters to use as separator.
+ 	--sep [string]	Separator between words. (Default: a blank space)
  
  Word list source
 	(Default: an internal list of about 4000 common English words.)
@@ -94,7 +94,7 @@ sub defaultWordList;
 GetOptions ('num=i' => \$num,
 	    'min=i' => \$min,
 	    'max=i' => \$max,
-            'separator=s' => \$sep,
+	    'sep=s' => \$sep,
 	    'dict' => \$dict,
 	    'file=s' => \$file,
 	    'help' => \$help,
@@ -111,21 +111,20 @@ die "Invalid parameter: positive numbers only!\nDied"
 	if $num < 1 or $min < 1 or $max < 1;
 die "Invalid options: dict and file are mutually exclusive.\nDied"
 	if $dict and $file;
+die "Invalid parameter: separator must be blank or a printable character.\nDied"
+	unless ($sep eq '') or ($sep =~ /[\p{POSIX_Print}\s]/);
 
 # Call the subroutine to compile the word list.
 if ($file) { @wordlist = arbitraryFile; }
 elsif ($dict) { @wordlist = systemDictionary; }
 else { @wordlist = defaultWordList; }
 
-# Create an array out of the separator string
-my @sep = split(//, $sep);
-
 # Choose words according to parameters, and construct the passphrase.
 foreach my $i (1 .. $num) {
 	my $word = $wordlist[ rand @wordlist ];
 	redo if length $word < $min or length $word > $max;
 	$passphrase .= $word;
-	if ($i < $num) { $passphrase .= $sep[ rand @sep ]; }
+	if ($i < $num) { $passphrase .= $sep; }
 }
 
 print($passphrase,"\n");
