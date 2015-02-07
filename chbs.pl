@@ -20,6 +20,7 @@ use strict;
 use warnings;
 use Pod::Usage;
 use Getopt::Long;
+use Encode;
 
 =head1 NAME
 
@@ -127,22 +128,20 @@ foreach my $i (1 .. $num) {
 	if ($i < $num) { $passphrase .= $sep; }
 }
 
-print($passphrase,"\n");
+print(encode('utf-8',$passphrase),"\n");
 
 exit;
 
-# Given an arbitrary text file, break each line up into words -- words being
-# defined as a sequence of alphabet characters -- and then make sure the final
-# list has each word only once. Note this isn't very smart about case, so
-# "ALLCAPS" is treated as a different word than "Allcaps".
+# Given an arbitrary text file, break each line up into words, in the Perl sense
+# of "words".
 sub arbitraryFile {
-	open(my $ARBITRARYFILE, "<", $file) or die "Cannot open: $!\nDied";
+	open(my $ARBITRARYFILE, "<:encoding(UTF-8)", $file) or die "Cannot open: $!\nDied";
 
 	my %seen = ( );
 	my @temp = ( );
 
 	while (<$ARBITRARYFILE>) {
-		push(@temp,split(/[^[:alpha:]]/));
+		push(@temp,split(/\W/));
 	}
 
 	close($ARBITRARYFILE);
@@ -160,8 +159,8 @@ sub arbitraryFile {
 # matter of checking that it's there, and stripping off the linefeeds.
 sub systemDictionary {
 	my $SYSTEMDICTIONARY;
-	open($SYSTEMDICTIONARY, "<", "/usr/share/dict/words") or
-	open($SYSTEMDICTIONARY, "<", "/usr/dict/words") or
+	open($SYSTEMDICTIONARY, "<:encoding(UTF-8)", "/usr/share/dict/words") or
+	open($SYSTEMDICTIONARY, "<:encoding(UTF-8)", "/usr/dict/words") or
 	die "Cannot open system spelling dictionary word list.\nDied";
 
 	while (<$SYSTEMDICTIONARY>) {
