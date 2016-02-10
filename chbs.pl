@@ -28,7 +28,7 @@ B<chbs> - correct horse battery staple
  
 =head1 SYNOPSIS
 
-B<chbs> [B<--help>|B<--man>] [B<--num> #] [B<--min> #] [B<--max> #] [--sep {string}] [B<--dict>|B<--file> {path}] 
+B<chbs> [B<--help>|B<--man>] [B<--num> #] [B<--min> #] [B<--max> #] [B<--sep> {string}] [B<--dict>|B<--file> {path}] 
 
 =head1 OPTIONS
 
